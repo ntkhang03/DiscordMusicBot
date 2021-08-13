@@ -9,7 +9,6 @@ module.exports = {
   aliases: ["time"],
 
   run: async (client, message, args) => {
-    if (!message.member.voice.channel)
     const time = process.uptime(),
 		hours = Math.floor(time / (60 * 60)),
 		minutes = Math.floor((time % (60 * 60)) / 60),
