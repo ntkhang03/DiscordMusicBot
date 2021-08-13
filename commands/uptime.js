@@ -13,7 +13,7 @@ module.exports = {
 		hours = Math.floor(time / (60 * 60)),
 		minutes = Math.floor((time % (60 * 60)) / 60),
 		seconds = Math.floor(time % 60);
-		message.channel.send(`${hours}: ${minutes}: ${seconds}`);
+		message.channel.send(`${hours}h ${minutes}p ${seconds}s`);
   }
 
 };
