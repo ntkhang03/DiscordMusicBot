@@ -71,14 +71,14 @@ module.exports = {
       ).join("\n");
 
       let Embed = new MessageEmbed()
-        .setAuthor("Queue", client.config.IconURL)
+        .setAuthor("Danh sách chờ", client.config.IconURL)
         .setColor("RANDOM")
         .setDescription(
           `**Hiện đang phát:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Tiếp theo:** \n${SongsDescription}\n\n`
         )
-        .addField("Total songs: \n", `\`${player.queue.totalSize - 1}\``, true)
+        .addField("Tổng số bài hát: \n", `\`${player.queue.totalSize - 1}\``, true)
         .addField(
-          "Total length: \n",
+          "Tổng thời gian: \n",
           `\`${prettyMilliseconds(player.queue.duration, {
             colonNotation: true,
           })}\``,
@@ -171,12 +171,12 @@ module.exports = {
             `**Hiện đang phát:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Tiếp theo:** \n${SongsDescription}\n\n`
           )
           .addField(
-            "Total songs: \n",
+            "Tổng số bài hát: \n",
             `\`${player.queue.totalSize - 1}\``,
             true
           )
           .addField(
-            "Total length: \n",
+            "Tổng thời gian: \n",
             `\`${prettyMilliseconds(player.queue.duration, {
               colonNotation: true,
             })}\``,
