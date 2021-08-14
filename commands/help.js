@@ -36,7 +36,7 @@ module.exports = {
               }help [Command] | Have a nice day!`
             ).setDescription(`${Commands.join("\n")}
   
-  Discord Music Bot Version: v${require("../package.json").version}`;
+  Discord Music Bot Version: v${require("../package.json").version}`);
       if (!args[0]) message.channel.send(Embed);
     else {
       let cmd =
@@ -114,7 +114,7 @@ SlashCommand: {
               }help [Command] để xem!`
             ).setDescription(`${Commands.join("\n")}
   
-  Discord Music Bot Version: v${require("../package.json").version}`;
+  Discord Music Bot Version: v${require("../package.json").version}`);
       if (!args) return interaction.send(Embed);
       else {
         let cmd =
