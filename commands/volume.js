@@ -3,7 +3,7 @@ const { TrackUtils } = require("erela.js");
 
 module.exports = {
     name: "volume",
-    description: "Check or change the current volume",
+    description: "Kiểm tra hoặc thay đổi âm lượng hiện tại",
     usage: "<volume>",
     permissions: {
         channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
@@ -19,14 +19,14 @@ module.exports = {
      */
     run: async (client, message, args, { GuildDB }) => {
         let player = await client.Manager.get(message.guild.id);
-        if (!player) return client.sendTime(message.channel, "❌ | **Nothing is playing right now...**");
+        if (!player) return client.sendTime(message.channel, "❌ | **Hiện tại không có bài hát nào đang phát...**");
         if (!args[0]) return client.sendTime(message.channel, `🔉 | Current volume \`${player.volume}\`.`);
-        if (!message.member.voice.channel) return client.sendTime(message.channel, "❌ | **You must be in a voice channel to use this command!**");
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return client.sendTime(message.channel, ":x: | **You must be in the same voice channel as me to use this command!**");
-        if (!parseInt(args[0])) return client.sendTime(message.channel, `**Please choose a number between** \`1 - 100\``);
+        if (!message.member.voice.channel) return client.sendTime(message.channel, "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này!**");
+        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return client.sendTime(message.channel, ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**");
+        if (!parseInt(args[0])) return client.sendTime(message.channel, `**Vui lòng chọn âm lượng trong khoảng ** \`1 - 100\``);
         let vol = parseInt(args[0]);
         player.setVolume(vol);
-        client.sendTime(message.channel, `🔉 | **Volume set to** \`${player.volume}\``);
+        client.sendTime(message.channel, `🔉 | **Đã thay đổi âm lượng thành ** \`${player.volume}\``);
     },
     SlashCommand: {
         options: [
@@ -35,7 +35,7 @@ module.exports = {
                 value: "amount",
                 type: 4,
                 required: false,
-                description: "Enter a volume from 1-100. Default is 100.",
+                description: "Nhập âm lượng trong khoảng 1 - 100, mặc định là 100",
             },
         ],
     /**
@@ -49,15 +49,15 @@ module.exports = {
             const guild = client.guilds.cache.get(interaction.guild_id);
             const member = guild.members.cache.get(interaction.member.user.id);
 
-            if (!member.voice.channel) return client.sendTime(interaction, "❌ | You must be in a voice channel to use this command.");
-            if (guild.me.voice.channel && !guild.me.voice.channel.equals(member.voice.channel)) return client.sendTime(interaction, ":x: | **You must be in the same voice channel as me to use this command!**");
+            if (!member.voice.channel) return client.sendTime(interaction, "❌ | Bạn phải ở trong một kênh thoại để sử dụng lệnh này!");
+            if (guild.me.voice.channel && !guild.me.voice.channel.equals(member.voice.channel)) return client.sendTime(interaction, ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**");
             let player = await client.Manager.get(interaction.guild_id);
-            if (!player) return client.sendTime(interaction, "❌ | **Nothing is playing right now...**");
+            if (!player) return client.sendTime(interaction, "❌ | **Hiện tại không có bài hát nào đang phát...**");
             if (!args[0].value) return client.sendTime(interaction, `🔉 | Current volume \`${player.volume}\`.`);
             let vol = parseInt(args[0].value);
-            if (!vol || vol < 1 || vol > 100) return client.sendTime(interaction, `**Please choose a number between** \`1 - 100\``);
+            if (!vol || vol < 1 || vol > 100) return client.sendTime(interaction, `**Vui lòng chọn âm lượng trong khoảng ** \`1 - 100\``);
             player.setVolume(vol);
-            client.sendTime(interaction, `🔉 | Volume set to \`${player.volume}\``);
+            client.sendTime(interaction, `🔉 | Đã thay đổi âm lượng thành \`${player.volume}\``);
         },
     },
 };

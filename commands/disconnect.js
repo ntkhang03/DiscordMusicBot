@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "disconnect",
-  description: "Stop the music and leave the voice channel",
+  description: "Dừng nhạc và rời khỏi kênh thoại",
   usage: "",
   permissions: {
     channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
@@ -18,8 +18,8 @@ module.exports = {
    */
   run: async (client, message, args, { GuildDB }) => {
     let player = await client.Manager.get(message.guild.id);
-    if (!message.member.voice.channel) return client.sendTime(message.channel, "❌ | **You must be in a voice channel use this command**");
-    if (!player) return client.sendTime(message.channel,"❌ | **Nothing is playing right now...**");
+    if (!message.member.voice.channel) return client.sendTime(message.channel, "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này**");
+    if (!player) return client.sendTime(message.channel,"❌ | **Hiện tại không có bài hát nào đang phát...**");
     await client.sendTime(message.channel,":notes: | **Disconnected!**");
     await message.react("✅");
     player.destroy();
@@ -40,7 +40,7 @@ module.exports = {
       if (!member.voice.channel)
         return client.sendTime(
           interaction,
-          "❌ | **You must be in a voice channel to use this command.**"
+          "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này.**"
         );
       if (
         guild.me.voice.channel &&
@@ -48,14 +48,14 @@ module.exports = {
       )
         return client.sendTime(
           interaction,
-          `❌ | **You must be in ${guild.me.voice.channel} to use this command.**`
+          `❌ | **Bạn phải ở ${guild.me.voice.channel} để sử dụng lệnh này.**`
         );
 
       let player = await client.Manager.get(interaction.guild_id);
       if (!player)
         return client.sendTime(
           interaction,
-          "❌ | **Nothing is playing right now...**"
+          "❌ | **Hiện tại không có bài hát nào đang phát...**"
         );
       player.destroy();
       client.sendTime(

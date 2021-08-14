@@ -1,6 +1,6 @@
 module.exports = {
   name: "uptime",
-  description: "Hiển thị thời gian bot hoạt độngy",
+  description: "Hiển thị thời gian bot hoạt động",
   usage: "[uptime]",
   permissions: {
     channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],

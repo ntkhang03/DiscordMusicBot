@@ -5,7 +5,7 @@ const prettyMilliseconds = require("pretty-ms");
 
 module.exports = {
   name: "search",
-  description: "Shows a result of songs based on the search query",
+  description: "Hiển thị kết quả của các bài hát dựa trên truy vấn tìm kiếm",
   usage: "[song]",
   permissions: {
     channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
@@ -23,21 +23,21 @@ module.exports = {
     if (!message.member.voice.channel)
       return client.sendTime(
         message.channel,
-        "❌ | **You must be in a voice channel to play something!**"
+        "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này!**"
       );
-      if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return client.sendTime(message.channel, ":x: | **You must be in the same voice channel as me to use this command!**");
+      if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return client.sendTime(message.channel, ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**");
 
     let SearchString = args.join(" ");
     if (!SearchString)
       return client.sendTime(
         message.channel,
-        `**Usage - **\`${GuildDB.prefix}search [query]\``
+        `**Usage: **\`${GuildDB.prefix}search [keyword]\``
       );
     let CheckNode = client.Manager.nodes.get(client.config.Lavalink.id);
     if (!CheckNode || !CheckNode.connected) {
       return client.sendTime(
         message.channel,
-        "❌ | **Lavalink node not connected**"
+        "❌ | **Lavalink node không được kết nối**"
       );
     }
     const player = client.Manager.create({
@@ -53,7 +53,7 @@ module.exports = {
     if (Searched.loadType == "NO_MATCHES")
       return client.sendTime(
         message.channel,
-        "No matches found for " + SearchString
+        "Không tìm thấy kết quả phù hợp nào cho từ khóa: " + SearchString
       );
     else {
       Searched.tracks = Searched.tracks.map((s, i) => {
@@ -72,7 +72,7 @@ module.exports = {
         );
 
         let em = new MessageEmbed()
-          .setAuthor("Search Results of " + SearchString, client.config.IconURL)
+          .setAuthor("Kết quả tìm kiếm của " + SearchString, client.config.IconURL)
           .setColor("RANDOM")
           .setDescription(MappedSongs.join("\n\n"));
         return em;
@@ -85,7 +85,7 @@ module.exports = {
       let w = (a) => new Promise((r) => setInterval(r, a));
       await w(500); //waits 500ms cuz needed to wait for the above song search embed to send ._.
       let msg = await message.channel.send(
-        "**Type the number of the song you want to play! Expires in `30 seconds`.**"
+        "**Nhập số bài hát bạn muốn phát! Hết hạn sau `60 giây '.**"
       );
 
       let er = false;
@@ -93,12 +93,12 @@ module.exports = {
         .awaitMessages((msg) => message.author.id === msg.author.id, {
           max: 1,
           errors: ["time"],
-          time: 30000,
+          time: 60000,
         })
         .catch(() => {
           er = true;
           msg.edit(
-            "**You took too long to respond. Run the command again if you want to play something!**"
+            "**Bạn đã mất quá nhiều thời gian để trả lời. Chạy lại lệnh nếu bạn muốn phát bài hát nào đó!**"
           );
         });
       if (er) return;
@@ -106,14 +106,14 @@ module.exports = {
       let SongIDmsg = SongID.first();
 
       if (!parseInt(SongIDmsg.content))
-        return client.sendTime(message.channel, "Please send correct song ID number");
+        return client.sendTime(message.channel, "Vui lòng gửi số ID bài hát chính xác");
       let Song = Searched.tracks[parseInt(SongIDmsg.content) - 1];
-      if (!Song) return client.sendTime(message.channel, "No song found for the given ID");
+      if (!Song) return client.sendTime(message.channel, "Không tìm thấy bài hát nào của ID đã cho");
       player.queue.add(Song);
       if (!player.playing && !player.paused && !player.queue.size)
         player.play();
       let SongAddedEmbed = new MessageEmbed();
-      SongAddedEmbed.setAuthor(`Added to queue`, client.config.IconURL);
+      SongAddedEmbed.setAuthor(`Thêm vào danh sách chờ`, client.config.IconURL);
       SongAddedEmbed.setThumbnail(Song.displayThumbnail());
       SongAddedEmbed.setColor("RANDOM");
       SongAddedEmbed.setDescription(`[${Song.title}](${Song.uri})`);
@@ -127,7 +127,7 @@ module.exports = {
       );
       if (player.queue.totalSize > 1)
         SongAddedEmbed.addField(
-          "Position in queue",
+          "Vị trí trong danh sách chờ: ",
           `${player.queue.size - 0}`,
           true
         );
@@ -142,7 +142,7 @@ module.exports = {
         value: "song",
         type: 3,
         required: true,
-        description: "Enter the song name or url you want to search",
+        description: "Nhập tên bài hát hoặc url bạn muốn tìm kiếm",
       },
     ],
     /**
@@ -160,7 +160,7 @@ module.exports = {
       if (!member.voice.channel)
         return client.sendTime(
           interaction,
-          "❌ | **You must be in a voice channel to use this command.**"
+          "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này!**"
         );
       if (
         guild.me.voice.channel &&
@@ -168,13 +168,13 @@ module.exports = {
       )
         return client.sendTime(
           interaction,
-          ":x: | **You must be in the same voice channel as me to use this command!**"
+          ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**"
         );
       let CheckNode = client.Manager.nodes.get(client.config.Lavalink.id);
       if (!CheckNode || !CheckNode.connected) {
         return client.sendTime(
           interaction,
-          "❌ | **Lavalink node not connected**"
+          "❌ | **Lavalink node không được kết nối**"
         );
       }
       let player = client.Manager.create({
@@ -195,17 +195,17 @@ module.exports = {
         switch (Searched.loadType) {
           case "LOAD_FAILED":
             if (!player.queue.current) player.destroy();
-            return client.sendError(interaction, `:x: | **There was an error while searching**`);
+            return client.sendError(interaction, `:x: | **Đã xảy ra lỗi khi tìm kiếm**`);
 
           case "NO_MATCHES":
             if (!player.queue.current) player.destroy();
-            return client.sendTime(interaction, ":x: | **No results were found**");
+            return client.sendTime(interaction, ":x: | **Không tìm thấy kết quả**");
           case "TRACK_LOADED":
             player.queue.add(TrackUtils.build(Searched.tracks[0], member.user));
             if (!player.playing && !player.paused && !player.queue.length)
               player.play();
             return client.sendTime(
-              interaction, `**Added to queue:** \`[${Searched.tracks[0].info.title}](${Searched.tracks[0].info.uri}}\`.`
+              interaction, `**Thêm vào danh sách chờ:** \`[${Searched.tracks[0].info.title}](${Searched.tracks[0].info.uri}}\`.`
             );
 
           case "PLAYLIST_LOADED":
@@ -221,7 +221,7 @@ module.exports = {
             )
               player.play();
             return client.sendTime(
-              interaction, `**Playlist added to queue**: \n**${Searched.playlist.name}** \nEnqueued: **${Searched.playlistInfo.length} songs**`
+              interaction, `**Danh sách đã được thêm vào hàng đợi**: \n**${Searched.playlist.name}** \nVị trí trong hàng đợi: **${Searched.playlistInfo.length} songs**`
             );
         }
       } else {
@@ -233,19 +233,19 @@ module.exports = {
           }
         } catch (err) {
           return client.sendTime(
-            interaction, `:x: | **There was an error while searching:** ${err.message}`
+            interaction, `:x: | **Đã xảy ra lỗi khi tìm kiếm:** ${err.message}`
           );
         }
         switch (res.loadType) {
           case "NO_MATCHES":
             if (!player.queue.current) player.destroy();
-            return client.sendTime(interaction, ":x: | **No results were found**");
+            return client.sendTime(interaction, ":x: | **Không tìm thấy kết quả**");
           case "TRACK_LOADED":
             player.queue.add(res.tracks[0]);
             if (!player.playing && !player.paused && !player.queue.length)
               player.play();
             return client.sendTime(
-              interaction, `**Added to queue:** \`[${res.tracks[0].title}](${res.tracks[0].uri})\`.`
+              interaction, `**Thêm vào danh sách chờ:** \`[${res.tracks[0].title}](${res.tracks[0].uri})\`.`
             );
           case "PLAYLIST_LOADED":
             player.queue.add(res.tracks);
@@ -257,7 +257,7 @@ module.exports = {
             )
               player.play();
             return client.sendTime(
-              interaction, `**Playlist added to queue**: \n**${res.playlist.name}** \nEnqueued: **${res.playlistInfo.length} songs**`
+              interaction, `**Danh sách đã được thêm vào hàng đợi**: \n**${res.playlist.name}** \nVị trí: **${res.playlistInfo.length} songs**`
             );
           case "SEARCH_RESULT":
             let max = 10,
@@ -281,10 +281,10 @@ module.exports = {
 
             const resultss = new MessageEmbed()
               .setDescription(
-                `${results}\n\n\t**Type the number of the song you want to play!**\n`
+                `${results}\n\n\t**Nhập số bài hát bạn muốn phát!**\n`
               )
               .setColor("RANDOM")
-              .setAuthor(`Search results for ${search}`, client.config.IconURL);
+              .setAuthor(`Kết quả cho từ khóa: ${search}`, client.config.IconURL);
             interaction.send(resultss);
             try {
               collected = await awaitchannel.awaitMessages(filter, {
@@ -295,7 +295,7 @@ module.exports = {
             } catch (e) {
               if (!player.queue.current) player.destroy();
               return awaitchannel.send(
-                "❌ | **You didn't provide a selection**"
+                "❌ | **Vui lòng nhập lựa chọn**"
               );
             }
 
@@ -309,7 +309,7 @@ module.exports = {
             const index = Number(first) - 1;
             if (index < 0 || index > max - 1)
               return awaitchannel.send(
-                `The number you provided was greater or less than the search total. Usage - \`(1-${max})\``
+                `Con số bạn đã cung cấp lớn hơn hoặc ít hơn tổng số tìm kiếm. Usage: \`(1-${max})\``
               );
             const track = res.tracks[index];
             player.queue.add(track);
@@ -318,7 +318,7 @@ module.exports = {
               player.play();
             } else {
               let SongAddedEmbed = new MessageEmbed();
-              SongAddedEmbed.setAuthor(`Added to queue`, client.config.IconURL);
+              SongAddedEmbed.setAuthor(`Thêm vào danh sách chờ`, client.config.IconURL);
               SongAddedEmbed.setThumbnail(track.displayThumbnail());
               SongAddedEmbed.setColor("RANDOM");
               SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`);
@@ -330,7 +330,7 @@ module.exports = {
                 })}\``,
                 true
               );
-              if (player.queue.totalSize > 1) SongAddedEmbed.addField("Position in queue", `${player.queue.size - 0}`, true);
+              if (player.queue.totalSize > 1) SongAddedEmbed.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
               awaitchannel.send(SongAddedEmbed);
             }
         }

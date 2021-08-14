@@ -3,7 +3,7 @@ const prettyMilliseconds = require("pretty-ms");
 
 module.exports = {
   name: "grab",
-  description: "Saves the current song to your Direct Messages",
+  description: "Lưu bài hát hiện tại vào Tin nhắn trực tiếp của bạn",
   usage: "",
   permissions: {
     channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
@@ -19,9 +19,9 @@ module.exports = {
 */
 run: async (client, message, args, { GuildDB }) => {
   let player = await client.Manager.get(message.guild.id);
-  if (!player) return client.sendTime(message.channel, "❌ | **Nothing is playing right now...**");
-  if (!message.member.voice.channel) return client.sendTime(message.channel, "❌ | **You must be in a voice channel to play something!**");
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return client.sendTime(message.channel, ":x: | **You must be in the same voice channel as me to use this command!**");
+  if (!player) return client.sendTime(message.channel, "❌ | **Hiện tại không có bài hát nào đang phát...**");
+  if (!message.member.voice.channel) return client.sendTime(message.channel, "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này!**");
+        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return client.sendTime(message.channel, ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**");
    message.author.send(new MessageEmbed()
    .setAuthor(`Song saved`, client.user.displayAvatarURL({
     dynamic: true
@@ -39,10 +39,10 @@ run: async (client, message, args, { GuildDB }) => {
     dynamic: true
   }))
     ).catch(e=>{
-      return message.channel.send("**:x: Your DMs are disabled**")
+      return message.channel.send("**:x: DMs của bạn bị vô hiệu hóa**")
     })    
 
-    client.sendTime(message.channel, "✅ | **Check your DMs!**")
+    client.sendTime(message.channel, "✅ | **Kiểm tra DMs của bạn!**")
   },
   SlashCommand: {
 /**
@@ -57,9 +57,9 @@ run: async (client, message, args, { GuildDB }) => {
     const user = client.users.cache.get(interaction.member.user.id);
     const member = guild.members.cache.get(interaction.member.user.id);
     let player = await client.Manager.get(interaction.guild_id);
-    if (!player) return client.sendTime(interaction, "❌ | **Nothing is playing right now...**");
-    if (!member.voice.channel) return client.sendTime(interaction, "❌ | **You must be in a voice channel to use this command.**");
-    if (guild.me.voice.channel && !guild.me.voice.channel.equals(member.voice.channel)) return client.sendTime(interaction, ":x: | **You must be in the same voice channel as me to use this command!**");
+    if (!player) return client.sendTime(interaction, "❌ | **Hiện tại không có bài hát nào đang phát...**");
+    if (!member.voice.channel) return client.sendTime(interaction, "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này!**");
+    if (guild.me.voice.channel && !guild.me.voice.channel.equals(member.voice.channel)) return client.sendTime(interaction, ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**");
     try{
     let embed = new MessageEmbed()
       .setAuthor(`Song saved: `, client.user.displayAvatarURL())
@@ -78,10 +78,10 @@ run: async (client, message, args, { GuildDB }) => {
       }))
       user.send(embed);
     }catch(e) {
-      return client.sendTime(interaction, "**:x: Your DMs are disabled**")
+      return client.sendTime(interaction, "**:x: DMs của bạn bị vô hiệu hóa!**")
     }
 
-    client.sendTime(interaction, "✅ | **Check your DMs!**")
+    client.sendTime(interaction, "✅ | **Kiểm tra DMs của bạn!**")
   },
   },
 };
