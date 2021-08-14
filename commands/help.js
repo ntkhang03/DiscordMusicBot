@@ -36,11 +36,8 @@ module.exports = {
               }help [Command] | Have a nice day!`
             ).setDescription(`${Commands.join("\n")}
   
-  Discord Music Bot Version: v${require("../package.json").version}
-  [✨ Support Server](${
-    client.config.SupportServer
-  }) | [GitHub](https://github.com/SudhanPlayz/Discord-MusicBot) | By [SudhanPlayz](https://github.com/SudhanPlayz)`);
-    if (!args[0]) message.channel.send(Embed);
+  Discord Music Bot Version: v${require("../package.json").version}`;
+      if (!args[0]) message.channel.send(Embed);
     else {
       let cmd =
         client.commands.get(args[0]) ||
@@ -112,15 +109,12 @@ SlashCommand: {
             )
             .setColor("RANDOM")
             .setFooter(
-              `To get info of each command type ${
+              `Để biết chi tiết cách dùng lệnh, hãy gõ ${
                 GuildDB ? GuildDB.prefix : client.config.DefaultPrefix
-              }help [Command] | Have a nice day!`
+              }help [Command] để xem!`
             ).setDescription(`${Commands.join("\n")}
   
-  Discord Music Bot Version: v${require("../package.json").version}
-  [✨ Support Server](${
-    client.config.SupportServer
-  }) | [GitHub](https://github.com/SudhanPlayz/Discord-MusicBot) | By [SudhanPlayz](https://github.com/SudhanPlayz)`);
+  Discord Music Bot Version: v${require("../package.json").version}`;
       if (!args) return interaction.send(Embed);
       else {
         let cmd =
