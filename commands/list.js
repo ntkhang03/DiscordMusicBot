@@ -3,8 +3,8 @@ const _ = require("lodash");
 const prettyMilliseconds = require("pretty-ms");
 
 module.exports = {
-  name: "queue",
-  description: "Shows all currently enqueued songs",
+  name: "list",
+  description: "Hiển thị tất cả bài hát trong danh sách chờ",
   usage: "",
   permissions: {
     channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
@@ -23,19 +23,19 @@ module.exports = {
     if (!player)
       return client.sendTime(
         message.channel,
-        "❌ | **Nothing is playing right now...**"
+        "❌ | **Hiện tại không có bài hát nào đang phát...**"
       );
 
     if (!player.queue || !player.queue.length || player.queue === 0) {
       let QueueEmbed = new MessageEmbed()
-        .setAuthor("Currently playing", client.config.IconURL)
+        .setAuthor("Hiện đang phát", client.config.IconURL)
         .setColor("RANDOM")
         .setDescription(
           `[${player.queue.current.title}](${player.queue.current.uri})`
         )
-        .addField("Requested by", `${player.queue.current.requester}`, true)
+        .addField("Yêu cầu bởi ", `${player.queue.current.requester}`, true)
         .addField(
-          "Duration",
+          "Thời lượng",
           `${
             client.ProgressBar(
               player.position,
@@ -67,14 +67,14 @@ module.exports = {
             {
               colonNotation: true,
             }
-          )}\` **|** Requested by: ${t.requester}\n`
+          )}\` **|** Yêu cầu bởi: ${t.requester}\n`
       ).join("\n");
 
       let Embed = new MessageEmbed()
         .setAuthor("Queue", client.config.IconURL)
         .setColor("RANDOM")
         .setDescription(
-          `**Currently Playing:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Up Next:** \n${SongsDescription}\n\n`
+          `**Hiện đang phát:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Tiếp theo:** \n${SongsDescription}\n\n`
         )
         .addField("Total songs: \n", `\`${player.queue.totalSize - 1}\``, true)
         .addField(
@@ -84,9 +84,9 @@ module.exports = {
           })}\``,
           true
         )
-        .addField("Requested by:", `${player.queue.current.requester}`, true)
+        .addField("Yêu cầu bởi:", `${player.queue.current.requester}`, true)
         .addField(
-          "Current song duration:",
+          "Thời lượng bài hát hiện tại:",
           `${
             client.ProgressBar(
               player.position,
@@ -109,17 +109,6 @@ module.exports = {
     else client.Pagination(message, Pages);
   },
   SlashCommand: {
-    /*
-    options: [
-      {
-          name: "page",
-          value: "[page]",
-          type: 4,
-          required: false,
-          description: "Enter the page of the queue you would like to view",
-      },
-  ],
-  */
     /**
      *
      * @param {import("../structures/DiscordMusicBot")} client
@@ -130,18 +119,18 @@ module.exports = {
     run: async (client, interaction, args, { GuildDB }) => {
       let player = await client.Manager.get(interaction.guild_id);
       if (!player)
-        return client.sendTime(interaction, "❌ | **Nothing is playing right now...**");
+        return client.sendTime(interaction, "❌ | **Hiện tại không có bài hát nào đang phát...**");
 
       if (!player.queue || !player.queue.length || player.queue === 0) {
         let QueueEmbed = new MessageEmbed()
-          .setAuthor("Currently playing", client.config.IconURL)
+          .setAuthor("Hiện đang phát", client.config.IconURL)
           .setColor("RANDOM")
           .setDescription(
             `[${player.queue.current.title}](${player.queue.current.uri})`
           )
-          .addField("Requested by", `${player.queue.current.requester}`, true)
+          .addField("Yêu cầu bởi", `${player.queue.current.requester}`, true)
           .addField(
-            "Duration",
+            "Thời lượng",
             `${
               client.ProgressBar(
                 player.position,
@@ -172,14 +161,14 @@ module.exports = {
               t.uri
             }) \n\`${prettyMilliseconds(t.duration, {
               colonNotation: true,
-            })}\` **|** Requested by: ${t.requester}\n`
+            })}\` **|** Yêu cầu bởi: ${t.requester}\n`
         ).join("\n");
 
         let Embed = new MessageEmbed()
           .setAuthor("Queue", client.config.IconURL)
           .setColor("RANDOM")
           .setDescription(
-            `**Currently Playing:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Up Next:** \n${SongsDescription}\n\n`
+            `**Hiện đang phát:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Tiếp theo:** \n${SongsDescription}\n\n`
           )
           .addField(
             "Total songs: \n",
@@ -193,9 +182,9 @@ module.exports = {
             })}\``,
             true
           )
-          .addField("Requested by:", `${player.queue.current.requester}`, true)
+          .addField("Yêu cầu bởi:", `${player.queue.current.requester}`, true)
           .addField(
-            "Current song duration:",
+            "Thời lượng bài hát hiện tại:",
             `${
               client.ProgressBar(
                 player.position,

@@ -3,7 +3,7 @@ const prettyMilliseconds = require("pretty-ms");
 
 module.exports = {
   name: "nowplaying",
-  description: "See what song is currently playing",
+  description: "Xem bài hát nào hiện đang phát",
   usage: "",
   permissions: {
     channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
@@ -22,17 +22,17 @@ module.exports = {
     if (!player)
       return client.sendTime(
         message.channel,
-        "❌ | **Nothing is playing right now...**"
+        "❌ | **Hiện tại không có bài hát nào đang phát..**"
       );
 
     let song = player.queue.current;
     let QueueEmbed = new MessageEmbed()
-      .setAuthor("Currently playing", client.config.IconURL)
+      .setAuthor("Hiện đang phát ", client.config.IconURL)
       .setColor("RANDOM")
       .setDescription(`[${song.title}](${song.uri})`)
-      .addField("Requested by", `${song.requester}`, true)
+      .addField("Yêu cầu bởi", `${song.requester}`, true)
       .addField(
-        "Duration",
+        "Thời lượng",
         `${
           client.ProgressBar(player.position, player.queue.current.duration, 15)
             .Bar
@@ -59,17 +59,17 @@ module.exports = {
       if (!player)
         return client.sendTime(
           interaction,
-          "❌ | **Nothing is playing right now...**"
+          "❌ | **Hiện tại không có bài hát nào đang phát..**"
         );
 
       let song = player.queue.current;
       let QueueEmbed = new MessageEmbed()
-        .setAuthor("Currently playing", client.config.IconURL)
+        .setAuthor("Hiện đang phát", client.config.IconURL)
         .setColor("RANDOM")
         .setDescription(`[${song.title}](${song.uri})`)
-        .addField("Requested by", `${song.requester}`, true)
+        .addField("Yêu cầu bởi", `${song.requester}`, true)
         .addField(
-          "Duration",
+          "Thời lượng",
           `${
             client.ProgressBar(
               player.position,
