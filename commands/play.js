@@ -79,8 +79,8 @@ module.exports = {
                     SongAddedEmbed.setAuthor(``, client.config.IconURL);
                     SongAddedEmbed.setThumbnail(Searched.tracks[0].displayThumbnail());
                     SongAddedEmbed.setDescription(`[${Searched.playlist.name}](${SearchString})`);
-                    SongAddedEmbed.addField("Enqueued", `\`${Searched.tracks.length}\` songs`, false);
-                    SongAddedEmbed.addField("Playlist duration", `\`${prettyMilliseconds(Searched.playlist.duration, { colonNotation: true })}\``, false);
+                    SongAddedEmbed.addField("Vị trí:", `\`${Searched.tracks.length}\` songs`, false);
+                    SongAddedEmbed.addField("Thời lượng danh sách", `\`${prettyMilliseconds(Searched.playlist.duration, { colonNotation: true })}\``, false);
                     Searching.edit(SongAddedEmbed);
                 } else {
                     player.queue.add(Searched.tracks[0]);
@@ -89,8 +89,8 @@ module.exports = {
 
                     SongAddedEmbed.setThumbnail(Searched.tracks[0].displayThumbnail());
                     SongAddedEmbed.setDescription(`[${Searched.tracks[0].title}](${Searched.tracks[0].uri})`);
-                    SongAddedEmbed.addField("Author", Searched.tracks[0].author, true);
-                    SongAddedEmbed.addField("Duration", `\`${prettyMilliseconds(Searched.tracks[0].duration, { colonNotation: true })}\``, true);
+                    SongAddedEmbed.addField("Tác giả", Searched.tracks[0].author, true);
+                    SongAddedEmbed.addField("Thời lượng", `\`${prettyMilliseconds(Searched.tracks[0].duration, { colonNotation: true })}\``, true);
                     if (player.queue.totalSize > 1) SongAddedEmbed.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
                     Searching.edit(SongAddedEmbed);
                 }
@@ -111,23 +111,17 @@ module.exports = {
                 description: "Phát bài hát trong kênh thoại",
             },
         ],
-        /**
-         *
-         * @param {import("../structures/DiscordMusicBot")} client
-         * @param {import("discord.js").Message} message
-         * @param {string[]} args
-         * @param {*} param3
-         */
+
         run: async (client, interaction, args, { GuildDB }) => {
             const guild = client.guilds.cache.get(interaction.guild_id);
             const member = guild.members.cache.get(interaction.member.user.id);
             const voiceChannel = member.voice.channel;
             let awaitchannel = client.channels.cache.get(interaction.channel_id); /// thanks Reyansh for this idea ;-;
             if (!member.voice.channel) return client.sendTime(interaction, "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này!**");
-            if (guild.me.voice.channel && !guild.me.voice.channel.equals(member.voice.channel)) return client.sendTime(interaction, ":x: | ****");
+            if (guild.me.voice.channel && !guild.me.voice.channel.equals(member.voice.channel)) return client.sendTime(interaction, ":x: | **Bạn phải ở cùng kênh thoại với bot để sử dụng lệnh này!**");
             let CheckNode = client.Manager.nodes.get(client.config.Lavalink.id);
             if (!CheckNode || !CheckNode.connected) {
-              return client.sendTime(interaction,"❌ | **Lavalink node not connected**");
+              return client.sendTime(interaction,"❌ | **Lavalink node không được kết nối**");
             }
     
             let player = client.Manager.create({
@@ -148,11 +142,11 @@ module.exports = {
                 switch (Searched.loadType) {
                     case "LOAD_FAILED":
                         if (!player.queue.current) player.destroy();
-                        return client.sendError(interaction, `❌ | **There was an error while searching**`);
+                        return client.sendError(interaction, `❌ | **Đã xảy ra lỗi khi tìm kiếm**`);
 
                     case "NO_MATCHES":
                         if (!player.queue.current) player.destroy();
-                        return client.sendTime(interaction, "❌ | **No results were found.**");
+                        return client.sendTime(interaction, "❌ | **Không tìm thấy kết quả**");
                     case "TRACK_LOADED":
                         player.queue.add(TrackUtils.build(Searched.tracks[0], member.user));
                         if (!player.playing && !player.paused && !player.queue.length) player.play();
@@ -160,7 +154,7 @@ module.exports = {
                             SongAddedEmbed.setAuthor(`Thêm vào danh sách chờ`, client.config.IconURL);
                             SongAddedEmbed.setColor("RANDOM");
                             SongAddedEmbed.setDescription(`[${Searched.tracks[0].info.title}](${Searched.tracks[0].info.uri})`);
-                            SongAddedEmbed.addField("Author", Searched.tracks[0].info.author, true);
+                            SongAddedEmbed.addField("Tác giả", Searched.tracks[0].info.author, true);
                             if (player.queue.totalSize > 1) SongAddedEmbed.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
                             return interaction.send(SongAddedEmbed);
 
@@ -171,7 +165,7 @@ module.exports = {
                             SongAdded.setAuthor(`Thêm vào danh sách chờ`, client.config.IconURL);
                             SongAdded.setColor("RANDOM");
                             SongAdded.setDescription(`[${Searched.tracks[0].info.title}](${Searched.tracks[0].info.uri})`);
-                            SongAdded.addField("Author", Searched.tracks[0].info.author, true);
+                            SongAdded.addField("Tác giả", Searched.tracks[0].info.author, true);
                             if (player.queue.totalSize > 1) SongAdded.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
                             return interaction.send(SongAdded);
 
@@ -182,7 +176,7 @@ module.exports = {
                         player.queue.add(songs);
                         if (!player.playing && !player.paused && player.queue.totalSize === Searched.tracks.length) player.play();
                         let Playlist = new MessageEmbed();
-                        Playlist.setAuthor(`Danh sách phát đã được thêm vài hàng đợi`, client.config.IconURL);
+                        Playlist.setAuthor(`Danh sách phát đã được thêm vào hàng đợi`, client.config.IconURL);
                         Playlist.setDescription(`[${Searched.playlistInfo.name}](${interaction.data.options[0].value})`);
                         Playlist.addField("Vị trí:", `\`${Searched.tracks.length}\` songs`, false);
                         return interaction.send(Playlist);
@@ -209,8 +203,8 @@ module.exports = {
                             SongAddedEmbed.setThumbnail(res.tracks[0].displayThumbnail());
                             SongAddedEmbed.setColor("RANDOM");
                             SongAddedEmbed.setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`);
-                            SongAddedEmbed.addField("Author", res.tracks[0].author, true);
-                            SongAddedEmbed.addField("Duration", `\`${prettyMilliseconds(res.tracks[0].duration, { colonNotation: true })}\``, true);
+                            SongAddedEmbed.addField("Tác giả", res.tracks[0].author, true);
+                            SongAddedEmbed.addField("Thời lượng", `\`${prettyMilliseconds(res.tracks[0].duration, { colonNotation: true })}\``, true);
                             if (player.queue.totalSize > 1) SongAddedEmbed.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
                             return interaction.send(SongAddedEmbed);
                             
@@ -222,7 +216,7 @@ module.exports = {
                         SongAdded.setThumbnail(res.tracks[0].displayThumbnail());
                         SongAdded.setDescription(`[${res.playlist.name}](${interaction.data.options[0].value})`);
                         SongAdded.addField("Vị trí", `\`${res.tracks.length}\` songs`, false);
-                        SongAdded.addField("Playlist duration", `\`${prettyMilliseconds(res.playlist.duration, { colonNotation: true })}\``, false);
+                        SongAdded.addField("Thời lượng danh sách", `\`${prettyMilliseconds(res.playlist.duration, { colonNotation: true })}\``, false);
                         return interaction.send(SongAdded);
                     case "SEARCH_RESULT":
                         const track = res.tracks[0];
@@ -235,8 +229,8 @@ module.exports = {
                             SongAddedEmbed.setThumbnail(track.displayThumbnail());
                             SongAddedEmbed.setColor("RANDOM");
                             SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`);
-                            SongAddedEmbed.addField("Author", track.author, true);
-                            SongAddedEmbed.addField("Duration", `\`${prettyMilliseconds(track.duration, { colonNotation: true })}\``, true);
+                            SongAddedEmbed.addField("Tác giả", track.author, true);
+                            SongAddedEmbed.addField("Thời lượng", `\`${prettyMilliseconds(track.duration, { colonNotation: true })}\``, true);
                             if (player.queue.totalSize > 1) SongAddedEmbed.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
                             player.play();
                             return interaction.send(SongAddedEmbed);
@@ -247,8 +241,8 @@ module.exports = {
                             SongAddedEmbed.setThumbnail(track.displayThumbnail());
                             SongAddedEmbed.setColor("RANDOM");
                             SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`);
-                            SongAddedEmbed.addField("Author", track.author, true);
-                            SongAddedEmbed.addField("Duration", `\`${prettyMilliseconds(track.duration, { colonNotation: true })}\``, true);
+                            SongAddedEmbed.addField("Tác giả", track.author, true);
+                            SongAddedEmbed.addField("Thời lượng", `\`${prettyMilliseconds(track.duration, { colonNotation: true })}\``, true);
                             if (player.queue.totalSize > 1) SongAddedEmbed.addField("Vị trí trong danh sách chờ", `${player.queue.size - 0}`, true);
                             interaction.send(SongAddedEmbed);
                         }

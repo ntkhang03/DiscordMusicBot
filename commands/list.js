@@ -76,7 +76,7 @@ module.exports = {
         .setDescription(
           `**Hiện đang phát:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Tiếp theo:** \n${SongsDescription}\n\n`
         )
-        .addField("Tổng số bài hát: \n", `\`${player.queue.totalSize - 1}\``, true)
+        .addField("\n\nTổng số bài hát: \n", `\`${player.queue.totalSize - 1}\``, true)
         .addField(
           "Tổng thời gian: \n",
           `\`${prettyMilliseconds(player.queue.duration, {
